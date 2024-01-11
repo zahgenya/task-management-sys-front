@@ -1,0 +1,13 @@
+import { Request, Response } from "express";
+import { Task } from "../models/task";
+
+const tasks: Task[] = [];
+
+export const getTasks = (req: Request, res: Response) => {
+  res.json(tasks);
+};
+
+export const createTask = (req: Request, res: Response) => {
+  const newTask: Task = req.body;
+  res.json(newTask);
+};
