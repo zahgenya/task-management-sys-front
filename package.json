@@ -6,8 +6,8 @@
   "scripts": {
     "tsc": "tsc",
     "dev": "ts-node-dev src/index.ts",
-    "build": "tsc && mv src/public build/",
-    "start": "node build/index.js"
+    "build": "tsc --outDir public",
+    "start": "node public/index.js"
   },
   "author": "Yevhenii Zakharchenko",
   "license": "ISC",
