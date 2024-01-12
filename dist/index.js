@@ -29,8 +29,38 @@ app.get('/ping', (_req, res) => {
 app.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, description, status } = req.body;
     try {
-        const result = yield (0, postgres_1.sql) `INSERT INTO Tasks (title, description, status) VALUES (${title}, ${description}, ${status})`;
+        const result = yield (0, postgres_1.sql) `
+      INSERT INTO Tasks (title, description, status)
+      VALUES (${title}, ${description}, ${status})
+      `;
         return res.status(201).json({ result });
+    }
+    catch (err) {
+        return res.status(500).json({ err });
+    }
+}));
+app.get('/tasks', (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield (0, postgres_1.sql) `
+    SELECT * FROM Tasks;
+    `;
+        return res.status(200).json({ result });
+    }
+    catch (err) {
+        return res.status(500).json({ err });
+    }
+}));
+app.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield (0, postgres_1.sql) `
+    DELETE FROM Tasks WHERE id = ${req.params.id}
+    `;
+        if (result.rowCount === 1) {
+            return res.status(200).json({ message: 'Succesfully deleted' });
+        }
+        else {
+            return res.status(204).json({ message: 'Task not found' });
+        }
     }
     catch (err) {
         return res.status(500).json({ err });
