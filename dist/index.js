@@ -26,10 +26,11 @@ app.get('/ping', (_req, res) => {
     console.log('pinged here');
     res.send('pong');
 });
-app.get('/api/create-pets-table', (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { title, description, status } = req.body;
     try {
-        const result = yield (0, postgres_1.sql) `CREATE TABLE Pets ( Name varchar(255), Owner varchar(255) );`;
-        return res.status(200).json({ result });
+        const result = yield (0, postgres_1.sql) `INSERT INTO Tasks (title, description, status) VALUES (${title}, ${description}, ${status})`;
+        return res.status(201).json({ result });
     }
     catch (err) {
         return res.status(500).json({ err });

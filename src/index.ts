@@ -18,11 +18,18 @@ app.get('/ping', (_req, res) => {
   res.send('pong')
 });
 
-app.get('/api/create-pets-table', async (_req, res) => {
+interface TaskReq {
+  title: string;
+  description: string;
+  status: string;
+}
+
+app.post('/', async (req, res) => {
+  const { title, description, status } = req.body as TaskReq;
   try {
     const result = 
-      await sql`CREATE TABLE Pets ( Name varchar(255), Owner varchar(255) );`
-    return res.status(200).json({ result })
+      await sql`INSERT INTO Tasks (title, description, status) VALUES (${title}, ${description}, ${status})`
+    return res.status(201).json({ result })
   } catch (err) {
     return res.status(500).json({ err })
   }
