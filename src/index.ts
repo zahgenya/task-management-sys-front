@@ -1,16 +1,21 @@
 import express from 'express';
 import cors from 'cors';
 import { sql } from '@vercel/postgres';
+import Pino from 'pino-http';
 
 const app = express();
+const logger = Pino({
+  level: 'info',
+});
 
 app.use(cors());
+app.use(logger);
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
 app.get('/', (_req, res) => {
-  res.send('Hello World')
+  res.send('Hello World');
 })
 
 app.get('/ping', (_req, res) => {

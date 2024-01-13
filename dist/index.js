@@ -15,8 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const postgres_1 = require("@vercel/postgres");
+const pino_http_1 = __importDefault(require("pino-http"));
 const app = (0, express_1.default)();
+const logger = (0, pino_http_1.default)({
+    level: 'info',
+});
 app.use((0, cors_1.default)());
+app.use(logger);
 app.use(express_1.default.json());
 const PORT = process.env.PORT || 3000;
 app.get('/', (_req, res) => {
