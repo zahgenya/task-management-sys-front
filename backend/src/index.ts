@@ -1,7 +1,10 @@
 import express from 'express';
 import cors from 'cors';
-import { sql } from '@vercel/postgres';
 import Pino from 'pino-http';
+import { createTask,
+  getAllTasks,
+  getTaskById,
+  deleteTaskById } from './queries'
 
 const app = express();
 const logger = Pino({
@@ -32,11 +35,7 @@ interface TaskReq {
 app.post('/', async (req, res) => {
   const { title, description, status } = req.body as TaskReq;
   try {
-    const result = await sql`
-      INSERT INTO Tasks (title, description, status)
-      VALUES (${title}, ${description}, ${status})
-      `;
-
+    const result = await createTask(title, description, status)
     return res.status(201).json({ result })
   } catch (err) {
     return res.status(500).json({ err })
@@ -45,10 +44,17 @@ app.post('/', async (req, res) => {
 
 app.get('/tasks', async (_req, res) => {
   try {
-    const result = await sql`
-    SELECT * FROM Tasks;
-    `;
+    const result = await getAllTasks();
+    return res.status(200).json({ result })
+  } catch (err) {
+    return res.status(500).json({ err })
+  }
+})
 
+app.get('/:id', async (req, res) => {
+  try {
+    const taskId = req.params.id
+    const result = await getTaskById(taskId)
     return res.status(200).json({ result })
   } catch (err) {
     return res.status(500).json({ err })
@@ -57,11 +63,9 @@ app.get('/tasks', async (_req, res) => {
 
 app.delete('/:id', async (req, res) => {
   try {
-    const result = await sql`
-    DELETE FROM Tasks WHERE id = ${req.params.id}
-    `;
-
-    if (result.rowCount === 1) {
+    const taskId = req.params.id
+    const result = await deleteTaskById(taskId)
+    if (result) {
       return res.status(200).json({ message: 'Succesfully deleted' });
     } else {
       return res.status(204).json({ message: 'Task not found' });
