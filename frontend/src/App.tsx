@@ -1,15 +1,29 @@
 import TaskColumn from './components/taskColumn'
 import { Task } from './types'
 import './index.css'
+import axios from 'axios';
 
-const tasks: Task[] = [
-  { id: 1, title: 'Task 1', description: "text...", status: "TODO" },
-  { id: 2, title: 'Task 2', description: "text...", status: "FINISHED" },
-  { id: 3, title: 'Task 3', description: "text...", status: "INPROGRESS" },
-  { id: 4, title: 'Task 4', description: "text...", status: "INPROGRESS" },
-]
+import { apiBaseUrl } from './constants';
+import { useEffect, useState } from 'react';
+
+import taskService from './services/tasks';
 
 function App() {
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const tasksData = await taskService.getAll();
+        console.log(tasksData);
+        setTasks(tasksData);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+    void fetchTasks();
+  }, []);
 
   return (
     <TaskColumn tasks={tasks} />
