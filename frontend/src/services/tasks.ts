@@ -13,6 +13,12 @@ const getAll = async () => {
   }
 }
 
+// const updateTask = async (id, method) => {
+//   try {
+    
+//   }
+// }
+
 export default {
   getAll
 }

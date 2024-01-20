@@ -4,7 +4,8 @@ import Pino from 'pino-http';
 import { createTask,
   getAllTasks,
   getTaskById,
-  deleteTaskById } from './queries'
+  deleteTaskById,
+  updateTaskById } from './queries'
 
 const app = express();
 const logger = Pino({
@@ -65,12 +66,38 @@ app.delete('/:id', async (req, res) => {
   try {
     const taskId = req.params.id
     const result = await deleteTaskById(taskId)
+
     if (result) {
       return res.status(200).json({ message: 'Succesfully deleted' });
     } else {
       return res.status(204).json({ message: 'Task not found' });
     }
   } catch (err) {
+    return res.status(500).json({ err })
+  }
+})
+
+app.put('/:id/:method', async (req, res) => {
+  try {
+    const taskId = req.params.id
+    const method = req.params.method
+
+    if (method !== 'TODO' &&
+        method !== 'INPROGRESS' && 
+        method !== 'FINISHED') {
+
+      return res.status(500).json({ message: "ERROR: invalid method" })
+    }
+
+    const result = await updateTaskById(taskId, method)
+    if (result) {
+      return res.status(200).json({ result })
+    } else {
+
+      return res.status(500).json({ message: "ERROR: db problem" })
+    }
+  } catch (err) {
+
     return res.status(500).json({ err })
   }
 })

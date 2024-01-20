@@ -18,7 +18,19 @@ const deleteTaskById = (taskId: string) => {
   return db.none(`DELETE FROM Tasks WHERE id = $1`, taskId)
 }
 
-export { createTask, getAllTasks, getTaskById, deleteTaskById };
+const updateTaskById = async (taskId: string, method: string) => {
+  try {
+  
+  await db.none(`UPDATE Tasks SET status = $1 WHERE id = $2`, [method, taskId])
+
+  const updatedTask = await db.one(`SELECT * FROM Tasks WHERE id = $1`, taskId)
+  return updatedTask
+  } catch (err) {
+    throw err;
+  }
+}
+
+export { createTask, getAllTasks, getTaskById, deleteTaskById, updateTaskById };
 
 /*
  CREATE TABLE Tasks (
