@@ -13,12 +13,17 @@ const getAll = async () => {
   }
 }
 
-// const updateTask = async (id, method) => {
-//   try {
-    
-//   }
-// }
+const updateTask = async (id: string, method: string) => {
+  try {
+    const response = await axios.put(`${apiBaseUrl}/${id}/${method}`)
+    return response.data
+  } catch (err) {
+    console.error("Error with parameters: ", err)
+    throw err;
+  }
+}
 
 export default {
-  getAll
+  getAll,
+  updateTask
 }

@@ -3,11 +3,23 @@ import { taskProps } from '../types';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import SendIcon from '@mui/icons-material/Send';
 import DeleteIcon from '@mui/icons-material/Delete';
+import taskService from '../services/tasks';
 
 const TaskColumn = ({ tasks }: taskProps) => {
+
   const todoTasks = tasks.filter(task => task.status === 'TODO');
   const inProgressTasks = tasks.filter(task => task.status === 'INPROGRESS');
   const finishedTasks = tasks.filter(task => task.status === 'FINISHED');
+
+  const handleButton = async (taskId: string, method: string) => {
+    try {
+      const result = await taskService.updateTask(taskId, method);
+      console.log("Update result: ", result)
+      return result
+    } catch (err) {
+      console.error("Error with handling button: ", err)
+    }
+  }
 
   return (
     <Grid container spacing={3}>
@@ -28,7 +40,8 @@ const TaskColumn = ({ tasks }: taskProps) => {
                       <Typography variant="body2" color="textSecondary">
                         {task.description}
                       </Typography>
-                      <Button size='small' variant='outlined' endIcon={<SendIcon />}>In Progress</Button>
+                      <Button size='small' variant='outlined' endIcon={<SendIcon />} 
+                      onClick={() => handleButton(JSON.stringify(task.id), "INPROGRESS")}>In Progress</Button>
                     </CardContent>
                   </Card>
                 </ListItem>
@@ -59,7 +72,8 @@ const TaskColumn = ({ tasks }: taskProps) => {
                       <Typography variant="body2" color="textSecondary">
                         {task.description}
                       </Typography>
-                      <Button size='small' variant='outlined' endIcon={<SendIcon />}>Finished</Button>
+                      <Button size='small' variant='outlined' endIcon={<SendIcon />}
+                       onClick={() => handleButton(JSON.stringify(task.id), "FINISHED")}>Finished</Button>
                     </CardContent>
                   </Card>
                 </ListItem>
