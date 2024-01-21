@@ -15,15 +15,26 @@ const getAll = async () => {
 
 const updateTask = async (id: string, method: string) => {
   try {
-    const response = await axios.put(`${apiBaseUrl}/${id}/${method}`)
-    return response.data
+    const res = await axios.put(`${apiBaseUrl}/${id}/${method}`)
+    return res.data
   } catch (err) {
     console.error("Error with parameters: ", err)
     throw err;
   }
 }
 
+const createNewTask = async (taskObj: TaskFormValues) => {
+  try {
+    const res = await axios.post(`${apiBaseUrl}`, taskObj)
+    return res.data
+  } catch (err) {
+    console.error("Error with task object: ", err)
+    throw err
+  }
+}
+
 export default {
   getAll,
-  updateTask
+  updateTask,
+  createNewTask
 }

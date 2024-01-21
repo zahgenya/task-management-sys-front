@@ -1,9 +1,6 @@
 import TaskColumn from './components/taskColumn'
 import { Task } from './types'
 import './index.css'
-import axios from 'axios';
-
-import { apiBaseUrl } from './constants';
 import { useEffect, useState } from 'react';
 
 import taskService from './services/tasks';

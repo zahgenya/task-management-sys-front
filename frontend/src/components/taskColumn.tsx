@@ -1,9 +1,9 @@
-import { Card, CardContent, Grid, Typography, List, ListItem, IconButton, Box, Button } from '@mui/material';
+import { Card, CardContent, Grid, Typography, List, ListItem, Box, Button } from '@mui/material';
 import { taskProps } from '../types';
-import AddTaskIcon from '@mui/icons-material/AddTask';
 import SendIcon from '@mui/icons-material/Send';
 import DeleteIcon from '@mui/icons-material/Delete';
 import taskService from '../services/tasks';
+import FromDialog from './dialogForm'
 
 const TaskColumn = ({ tasks }: taskProps) => {
 
@@ -11,7 +11,7 @@ const TaskColumn = ({ tasks }: taskProps) => {
   const inProgressTasks = tasks.filter(task => task.status === 'INPROGRESS');
   const finishedTasks = tasks.filter(task => task.status === 'FINISHED');
 
-  const handleButton = async (taskId: string, method: string) => {
+  const handleNextButton = async (taskId: string, method: string) => {
     try {
       const result = await taskService.updateTask(taskId, method);
       console.log("Update result: ", result)
@@ -19,6 +19,10 @@ const TaskColumn = ({ tasks }: taskProps) => {
     } catch (err) {
       console.error("Error with handling button: ", err)
     }
+  }
+
+  const handleDeleteButton = async () => {
+
   }
 
   return (
@@ -41,7 +45,7 @@ const TaskColumn = ({ tasks }: taskProps) => {
                         {task.description}
                       </Typography>
                       <Button size='small' variant='outlined' endIcon={<SendIcon />} 
-                      onClick={() => handleButton(JSON.stringify(task.id), "INPROGRESS")}>In Progress</Button>
+                      onClick={() => handleNextButton(JSON.stringify(task.id), "INPROGRESS")}>In Progress</Button>
                     </CardContent>
                   </Card>
                 </ListItem>
@@ -49,9 +53,10 @@ const TaskColumn = ({ tasks }: taskProps) => {
             </List>
           </CardContent>
           <Box display="flex" justifyContent="flex-end" p={2}>
-          <IconButton aria-label='add' title='Add task'>
+          {/* <IconButton aria-label='add' title='Add task'>
                 <AddTaskIcon />
-          </IconButton>
+          </IconButton> */}
+          <FromDialog />
           </Box>
         </Card>
       </Grid>
@@ -73,7 +78,7 @@ const TaskColumn = ({ tasks }: taskProps) => {
                         {task.description}
                       </Typography>
                       <Button size='small' variant='outlined' endIcon={<SendIcon />}
-                       onClick={() => handleButton(JSON.stringify(task.id), "FINISHED")}>Finished</Button>
+                       onClick={() => handleNextButton(JSON.stringify(task.id), "FINISHED")}>Finished</Button>
                     </CardContent>
                   </Card>
                 </ListItem>
