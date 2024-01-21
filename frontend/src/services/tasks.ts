@@ -33,8 +33,19 @@ const createNewTask = async (taskObj: TaskFormValues) => {
   }
 }
 
+const deleteTask = async (id: string) => {
+  try {
+    const res = await axios.delete(`${apiBaseUrl}/${id}`)
+    return res.data
+  } catch (err) {
+    console.error("Error with id: ", err)
+    throw err;
+  }
+}
+
 export default {
   getAll,
   updateTask,
-  createNewTask
+  createNewTask,
+  deleteTask
 }

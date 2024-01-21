@@ -21,8 +21,14 @@ const TaskColumn = ({ tasks }: taskProps) => {
     }
   }
 
-  const handleDeleteButton = async () => {
-
+  const handleDeleteButton = async (taskId) => {
+    try {
+      const result = await taskService.deleteTask(taskId);
+      console.log("Delete result: ", result)
+      return result
+    } catch (err) {
+      console.error("Error with handling button: ", err)
+    }
   }
 
   return (
@@ -104,7 +110,8 @@ const TaskColumn = ({ tasks }: taskProps) => {
                       <Typography variant="body2" color="textSecondary">
                         {task.description}
                       </Typography>
-                      <Button size='small' variant='outlined' endIcon={<DeleteIcon />}>Delete</Button>
+                      <Button size='small' variant='outlined' endIcon={<DeleteIcon />}
+                        onClick={() => handleDeleteButton(JSON.stringify(task.id))}>Delete</Button>
                     </CardContent>
                   </Card>
                 </ListItem>
