@@ -9,8 +9,9 @@ import {
   DialogTitle } from '@mui/material';
 import taskService from '../services/tasks';
 import { TaskFormValues } from '../types';
+import { Task } from '../types';
 
-export default function FormDialog() {
+export default function FormDialog({ setTasks }: { setTasks: React.Dispatch<React.SetStateAction<Task[]>> }) {
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
@@ -41,6 +42,8 @@ export default function FormDialog() {
             status: "TODO"
           }
           await taskService.createNewTask(taskForm)
+          const newTasks = await taskService.getAll();
+          setTasks(newTasks);
           handleClose();
         } catch (err) {
           console.error("Error submiting form: ", err)
@@ -69,7 +72,6 @@ export default function FormDialog() {
           />
           <TextField
             autoFocus
-            required
             margin='dense'
             id='description'
             name='description'

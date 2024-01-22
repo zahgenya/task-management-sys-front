@@ -4,8 +4,10 @@ import SendIcon from '@mui/icons-material/Send';
 import DeleteIcon from '@mui/icons-material/Delete';
 import taskService from '../services/tasks';
 import FromDialog from './dialogForm'
+import React from 'react';
+import { Task } from '../types';
 
-const TaskColumn = ({ tasks }: taskProps) => {
+const TaskColumn = ({ tasks, setTasks }: taskProps & { setTasks: React.Dispatch<React.SetStateAction<Task[]>> } ) => {
 
   const todoTasks = tasks.filter(task => task.status === 'TODO');
   const inProgressTasks = tasks.filter(task => task.status === 'INPROGRESS');
@@ -15,16 +17,27 @@ const TaskColumn = ({ tasks }: taskProps) => {
     try {
       const result = await taskService.updateTask(taskId, method);
       console.log("Update result: ", result)
+      reRender()
       return result
     } catch (err) {
       console.error("Error with handling button: ", err)
     }
   }
 
-  const handleDeleteButton = async (taskId) => {
+  const reRender = async () => {
+    try {
+      const newTasks = await taskService.getAll();
+      setTasks(newTasks);
+    } catch (err) {
+      console.error("Error fetching tasks: ", err)
+    }
+  }
+
+  const handleDeleteButton = async (taskId: string) => {
     try {
       const result = await taskService.deleteTask(taskId);
       console.log("Delete result: ", result)
+      reRender()
       return result
     } catch (err) {
       console.error("Error with handling button: ", err)
@@ -62,7 +75,7 @@ const TaskColumn = ({ tasks }: taskProps) => {
           {/* <IconButton aria-label='add' title='Add task'>
                 <AddTaskIcon />
           </IconButton> */}
-          <FromDialog />
+          <FromDialog setTasks={setTasks}/>
           </Box>
         </Card>
       </Grid>

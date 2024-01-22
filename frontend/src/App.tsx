@@ -23,7 +23,7 @@ function App() {
   }, []);
 
   return (
-    <TaskColumn tasks={tasks} />
+    <TaskColumn tasks={tasks} setTasks={setTasks}/>
   )
 }
 
