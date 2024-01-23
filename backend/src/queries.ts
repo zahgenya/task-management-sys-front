@@ -30,7 +30,11 @@ const updateTaskById = async (taskId: string, method: string) => {
   }
 }
 
-export { createTask, getAllTasks, getTaskById, deleteTaskById, updateTaskById };
+const getAllTestTasks = async () => {
+  return db.any(`SELECT * FROM testTasks;`)
+}
+
+export { createTask, getAllTasks, getTaskById, deleteTaskById, updateTaskById, getAllTestTasks };
 
 /*
  CREATE TABLE Tasks (
