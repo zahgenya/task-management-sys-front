@@ -34,7 +34,12 @@ const getTaskById = async (taskId: string) => {
 
 const deleteTaskById = async (taskId: string) => {
   try {
-    await db.none(`DELETE FROM Tasks WHERE id = $1`, taskId);
+    const taskToDelete = await db.none(`DELETE FROM Tasks WHERE id = $1`, taskId);
+
+    if (!taskToDelete) {
+      throw new Error('Task not found')
+    }
+
   } catch (err) {
     throw err;
   }
@@ -57,21 +62,12 @@ const updateTaskById = async (taskId: string, method: string) => {
   }
 };
 
-const getAllTestTasks = async () => {
-  try {
-    await db.any(`SELECT * FROM testTasks;`);
-  } catch (err) {
-    throw err;
-  }
-};
-
 export {
   createTask,
   getAllTasks,
   getTaskById,
   deleteTaskById,
   updateTaskById,
-  getAllTestTasks,
 };
 
 /*

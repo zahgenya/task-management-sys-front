@@ -67,13 +67,9 @@ app.get('/:id', async (req, res) => {
 app.delete('/:id', async (req, res) => {
   try {
     const taskId = req.params.id;
-    const result = await deleteTaskById(taskId);
+    await deleteTaskById(taskId);
 
-    if (result) {
-      return res.status(200).json({ message: 'Succesfully deleted' });
-    } else {
-      return res.status(204).json({ message: 'Task not found' });
-    }
+    return res.status(200).json({ message: "Succesfully deleted!" })
   } catch (err) {
     return res.status(500).json({ err });
   }
