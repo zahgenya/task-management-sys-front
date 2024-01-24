@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
-import { Task } from "../models/task";
-import { getAllTestTasks } from "../queries";
+import { Request, Response } from 'express';
+import { Task } from '../models/task';
+import { getAllTestTasks } from '../queries';
 
 const tasks: Task[] = [];
 
@@ -18,7 +18,7 @@ export const getTestTasks = async (_req: Request, res: Response) => {
     const tasks = await getAllTestTasks();
     res.status(200).json(tasks);
   } catch (err) {
-    console.error("Error with fetching data: ", err)
-    res.status(500).json({ error: 'Internal server error' })
+    console.error('Error with fetching data: ', err);
+    res.status(500).json({ error: 'Internal server error' });
   }
-}
+};

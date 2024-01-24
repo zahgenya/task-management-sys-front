@@ -14,7 +14,12 @@ app.get('/testTasks', getTestTasks);
 describe('GET /testTasks route', () => {
   test('returns a list of tasks', async () => {
     (getAllTestTasks as jest.Mock).mockResolvedValue([
-      { id: '1', title: 'Task 1', description: 'Description 1', status: 'TODO' },
+      {
+        id: '1',
+        title: 'Task 1',
+        description: 'Description 1',
+        status: 'TODO',
+      },
     ]);
 
     const response = await request(app).get('/testTasks');
@@ -22,9 +27,14 @@ describe('GET /testTasks route', () => {
     expect(response.status).toBe(200);
 
     expect(response.body).toEqual([
-      { id: '1', title: 'Task 1', description: 'Description 1', status: 'TODO' },
-    ])
-  })
+      {
+        id: '1',
+        title: 'Task 1',
+        description: 'Description 1',
+        status: 'TODO',
+      },
+    ]);
+  });
 
   test('handles errors gracefully', async () => {
     (getAllTestTasks as jest.Mock).mockRejectedValue(new Error('Some error'));
@@ -35,5 +45,4 @@ describe('GET /testTasks route', () => {
 
     expect(response.body).toEqual({ error: 'Internal server error' });
   });
-})
-
+});

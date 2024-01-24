@@ -7,4 +7,4 @@ const pgp = pgPromise();
 const connectionString = process.env.POSTGRESQL || '';
 const db = pgp(connectionString);
 
-export { db }
+export { db };
