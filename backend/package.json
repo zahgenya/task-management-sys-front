@@ -7,7 +7,7 @@
     "tsc": "tsc",
     "dev": "ts-node-dev src/index.ts",
     "start": "nodemon build/index.js",
-    "test": "jest",
+    "test": "NODE_ENV=test ts-node-dev src/index.ts",
     "lint": "eslint --ext .js,.ts"
   },
   "author": "Yevhenii Zakharchenko",
@@ -18,7 +18,7 @@
     "@types/node": "^20.11.0",
     "@types/supertest": "^6.0.2",
     "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
+    "dotenv": "^16.4.0",
     "express": "^4.18.2",
     "nodemon": "^3.0.2",
     "pg": "^8.11.3",

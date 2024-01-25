@@ -1,5 +1,7 @@
 import { db } from './database';
 
+const tableName = process.env.NODE_ENV === 'test' ? 'testTasks' : 'Tasks';
+
 const createTask = async (
   title: string,
   description: string,
@@ -7,7 +9,7 @@ const createTask = async (
 ) => {
   try {
     await db.none(
-      `INSERT INTO Tasks (title, description, status)
+      `INSERT INTO ${tableName} (title, description, status)
                    VALUES ($1, $2, $3)`,
       [title, description, status]
     );
@@ -26,7 +28,7 @@ const getAllTasks = async () => {
 
 const getTaskById = async (taskId: string) => {
   try {
-    await db.one(`SELECT * FROM Tasks WHERE id = $1`, taskId);
+    await db.one(`SELECT * FROM ${tableName} WHERE id = $1`, taskId);
   } catch (err) {
     throw err;
   }
@@ -34,7 +36,7 @@ const getTaskById = async (taskId: string) => {
 
 const deleteTaskById = async (taskId: string) => {
   try {
-    const taskToDelete = await db.none(`DELETE FROM Tasks WHERE id = $1`, taskId);
+    const taskToDelete = await db.none(`DELETE FROM ${tableName} WHERE id = $1`, taskId);
 
     if (!taskToDelete) {
       throw new Error('Task not found')
@@ -47,13 +49,13 @@ const deleteTaskById = async (taskId: string) => {
 
 const updateTaskById = async (taskId: string, method: string) => {
   try {
-    await db.none(`UPDATE Tasks SET status = $1 WHERE id = $2`, [
+    await db.none(`UPDATE ${tableName} SET status = $1 WHERE id = $2`, [
       method,
       taskId,
     ]);
 
     const updatedTask = await db.one(
-      `SELECT * FROM Tasks WHERE id = $1`,
+      `SELECT * FROM ${tableName} WHERE id = $1`,
       taskId
     );
     return updatedTask;

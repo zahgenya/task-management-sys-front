@@ -9,9 +9,9 @@ import { Task } from '../types';
 
 const TaskColumn = ({ tasks, setTasks }: taskProps & { setTasks: React.Dispatch<React.SetStateAction<Task[]>> } ) => {
 
-  const todoTasks = tasks.filter(task => task.status === 'TODO');
-  const inProgressTasks = tasks.filter(task => task.status === 'INPROGRESS');
-  const finishedTasks = tasks.filter(task => task.status === 'FINISHED');
+  const todoTasks = tasks ? tasks.filter(task => task.status === 'TODO') : [];
+  const inProgressTasks = tasks ? tasks.filter(task => task.status === 'INPROGRESS') : [];
+  const finishedTasks = tasks ? tasks.filter(task => task.status === 'FINISHED') : [];
 
   const handleNextButton = async (taskId: string, method: string) => {
     try {
@@ -52,6 +52,11 @@ const TaskColumn = ({ tasks, setTasks }: taskProps & { setTasks: React.Dispatch<
             <Typography variant="h5" gutterBottom>
               To Do
             </Typography>
+            {todoTasks.length === 0 ? (
+              <Typography variant='body2' color="textSecondary">
+                No tasks in this column
+              </Typography>
+            ) : (
             <List dense={false}>
               {todoTasks.map((task) => (
                 <ListItem key={task.id}>
@@ -70,6 +75,7 @@ const TaskColumn = ({ tasks, setTasks }: taskProps & { setTasks: React.Dispatch<
                 </ListItem>
               ))}
             </List>
+            )}
           </CardContent>
           <Box display="flex" justifyContent="flex-end" p={2}>
           {/* <IconButton aria-label='add' title='Add task'>
@@ -85,6 +91,11 @@ const TaskColumn = ({ tasks, setTasks }: taskProps & { setTasks: React.Dispatch<
             <Typography variant="h5" gutterBottom>
               In Progress
             </Typography>
+            {inProgressTasks.length === 0 ? (
+              <Typography variant='body2' color="textSecondary">
+                No tasks in this column.
+              </Typography>
+            ) : (
             <List dense={false}>
               {inProgressTasks.map((task) => (
                 <ListItem key={task.id}>
@@ -103,6 +114,7 @@ const TaskColumn = ({ tasks, setTasks }: taskProps & { setTasks: React.Dispatch<
                 </ListItem>
               ))}
             </List>
+            )}
           </CardContent>
         </Card>
       </Grid>
@@ -112,6 +124,11 @@ const TaskColumn = ({ tasks, setTasks }: taskProps & { setTasks: React.Dispatch<
             <Typography variant="h5" gutterBottom>
               Finished
             </Typography>
+            {finishedTasks.length === 0 ? (
+              <Typography variant='body2' color="textSecondary">
+                No tasks in this column.
+              </Typography>
+            ) : (
             <List dense={false}>
               {finishedTasks.map((task) => (
                 <ListItem key={task.id}>
@@ -130,6 +147,7 @@ const TaskColumn = ({ tasks, setTasks }: taskProps & { setTasks: React.Dispatch<
                 </ListItem>
               ))}
             </List>
+            )}
           </CardContent>
         </Card>
       </Grid>
