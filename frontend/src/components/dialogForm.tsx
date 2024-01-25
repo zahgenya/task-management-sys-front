@@ -83,8 +83,8 @@ export default function FormDialog({ setTasks }: { setTasks: React.Dispatch<Reac
           />
         </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button type='submit'>Add</Button>
+        <Button onClick={handleClose} data-testid="cancelButtonForm">Cancel</Button>
+        <Button type='submit' data-testid="addButtonForm">Add</Button>
       </DialogActions>
       </Dialog>
     </React.Fragment>

@@ -20,7 +20,9 @@ const createTask = async (
 
 const getAllTasks = async () => {
   try {
-    await db.any(`SELECT * FROM Tasks;`);
+    const tasks = await db.any(`SELECT * FROM ${tableName};`);
+    console.log('Table name: ', tableName)
+    return tasks
   } catch (err) {
     throw err;
   }
@@ -28,7 +30,8 @@ const getAllTasks = async () => {
 
 const getTaskById = async (taskId: string) => {
   try {
-    await db.one(`SELECT * FROM ${tableName} WHERE id = $1`, taskId);
+    const task = await db.one(`SELECT * FROM ${tableName} WHERE id = $1`, taskId);
+    return task
   } catch (err) {
     throw err;
   }
