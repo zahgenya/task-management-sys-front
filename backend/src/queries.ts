@@ -39,12 +39,14 @@ const getTaskById = async (taskId: string) => {
 
 const deleteTaskById = async (taskId: string) => {
   try {
-    const taskToDelete = await db.none(`DELETE FROM ${tableName} WHERE id = $1`, taskId);
+    const taskToDelete = await db.result(
+      `DELETE FROM ${tableName} WHERE id = $1`,
+      taskId
+    );
 
-    if (!taskToDelete) {
-      throw new Error('Task not found')
+    if (taskToDelete.rowCount === 0) {
+      throw new Error('Task not found');
     }
-
   } catch (err) {
     throw err;
   }

@@ -41,6 +41,8 @@ const TaskColumn = ({ tasks, setTasks }: taskProps & { setTasks: React.Dispatch<
       return result
     } catch (err) {
       console.error("Error with handling button: ", err)
+    } finally {
+      reRender()
     }
   }
 

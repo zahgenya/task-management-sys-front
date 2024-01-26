@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import Pino from 'pino-http';
+import favicon from 'express-favicon';
 import {
   createTask,
   getAllTasks,
@@ -14,11 +15,12 @@ const logger = Pino({
   level: 'info',
 });
 
+app.use(favicon(__dirname + '/public/favicon.png'));
 app.use(cors());
 app.use(logger);
 app.use(express.json());
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 5174;
 
 app.get('/', (_req, res) => {
   res.send('Hello World');
@@ -71,7 +73,9 @@ app.delete('/:id', async (req, res) => {
 
     return res.status(200).json({ message: "Succesfully deleted!" })
   } catch (err) {
-    return res.status(500).json({ err });
+
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    return res.status(500).json({ error: "Internal Server Error", message: errorMessage });
   }
 });
 

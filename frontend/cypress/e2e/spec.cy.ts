@@ -7,4 +7,8 @@ describe('template spec', () => {
     cy.get('[data-testid="addButtonForm"]').click()
     cy.contains('Task 1')
   })
+
+  it('TEST', () => {
+    cy.visit('http://localhost:5174/tasks')
+  })
 })
