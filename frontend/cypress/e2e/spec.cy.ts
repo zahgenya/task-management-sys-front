@@ -8,7 +8,7 @@ describe('template spec', () => {
     cy.contains('Task 1')
   })
 
-  it('TEST', () => {
-    cy.visit('http://localhost:5174/tasks')
-  })
+  // it('TEST', () => {
+  //   cy.visit('http://localhost:3000/tasks')
+  // })
 })

@@ -21,8 +21,8 @@ const createTask = async (
 const getAllTasks = async () => {
   try {
     const tasks = await db.any(`SELECT * FROM ${tableName};`);
-    console.log('Table name: ', tableName)
-    return tasks
+    console.log('Table name: ', tableName);
+    return tasks;
   } catch (err) {
     throw err;
   }
@@ -30,8 +30,11 @@ const getAllTasks = async () => {
 
 const getTaskById = async (taskId: string) => {
   try {
-    const task = await db.one(`SELECT * FROM ${tableName} WHERE id = $1`, taskId);
-    return task
+    const task = await db.one(
+      `SELECT * FROM ${tableName} WHERE id = $1`,
+      taskId
+    );
+    return task;
   } catch (err) {
     throw err;
   }
@@ -69,19 +72,26 @@ const updateTaskById = async (taskId: string, method: string) => {
   }
 };
 
+const createDefaultTable = async () => {
+  try {
+    await db.none(
+      `CREATE TABLE IF NOT EXISTS Tasks (
+      id SERIAL PRIMARY KEY,
+      title VARCHAR(255) NOT NULL,
+      description TEXT,
+      status VARCHAR(20) NOT NULL
+    );`
+    );
+  } catch (err) {
+    throw err;
+  }
+};
+
 export {
   createTask,
   getAllTasks,
   getTaskById,
   deleteTaskById,
   updateTaskById,
+  createDefaultTable,
 };
-
-/*
- CREATE TABLE Tasks (
-  id SERIAL PRIMARY KEY,
-  title VARCHAR(255) NOT NULL,
-  description TEXT,
-  status VARCHAR(20) NOT NULL
-);
-*/

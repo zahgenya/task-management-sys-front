@@ -8,6 +8,7 @@ import {
   getTaskById,
   deleteTaskById,
   updateTaskById,
+  createDefaultTable,
 } from './queries';
 
 const app = express();
@@ -21,6 +22,8 @@ app.use(logger);
 app.use(express.json());
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 5174;
+
+createDefaultTable();
 
 app.get('/', (_req, res) => {
   res.send('Hello World');
@@ -99,6 +102,6 @@ app.put('/:id/:method', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is running on port ${PORT}`);
 });
