@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import Pino from 'pino-http';
 import favicon from 'express-favicon';
+import { status } from './models/task';
 import {
   createTask,
   getAllTasks,
@@ -37,13 +38,13 @@ app.get('/ping', (_req, res) => {
 interface TaskReq {
   title: string;
   description: string;
-  status: string;
+  status: status;
 }
 
 app.post('/', async (req, res) => {
-  const { title, description, status } = req.body as TaskReq;
+  const { title, description } = req.body as TaskReq;
   try {
-    const result = await createTask(title, description, status);
+    const result = await createTask(title, description, status.toDo);
     return res.status(201).json({ result });
   } catch (err) {
     return res.status(500).json({ err });
@@ -74,34 +75,44 @@ app.delete('/:id', async (req, res) => {
     const taskId = req.params.id;
     await deleteTaskById(taskId);
 
-    return res.status(200).json({ message: "Succesfully deleted!" })
+    return res.status(200).json({ message: 'Succesfully deleted!' });
   } catch (err) {
-
     const errorMessage = err instanceof Error ? err.message : String(err);
-    return res.status(500).json({ error: "Internal Server Error", message: errorMessage });
+    return res
+      .status(500)
+      .json({ error: 'Internal Server Error', message: errorMessage });
   }
 });
 
 app.put('/:id/:method', async (req, res) => {
-  try {
-    const taskId = req.params.id;
-    const method = req.params.method;
+  const taskId = req.params.id;
+  const method = req.params.method;
+  let result;
 
-    if (method !== 'TODO' && method !== 'INPROGRESS' && method !== 'FINISHED') {
+  switch (method) {
+    case 'toDo':
+      result = await updateTaskById(taskId, status.toDo);
+      break;
+
+    case 'inProgress':
+      result = await updateTaskById(taskId, status.inProgress);
+      break;
+
+    case 'finished':
+      result = await updateTaskById(taskId, status.finished);
+      break;
+
+    default:
       return res.status(500).json({ message: 'ERROR: invalid method' });
-    }
+  }
 
-    const result = await updateTaskById(taskId, method);
-    if (result) {
-      return res.status(200).json({ result });
-    } else {
-      return res.status(500).json({ message: 'ERROR: db problem' });
-    }
-  } catch (err) {
-    return res.status(500).json({ err });
+  if (result) {
+    return res.status(200).json({ result });
+  } else {
+    return res.status(500).json({ message: 'ERROR: db error' });
   }
 });
 
-app.listen(PORT, "0.0.0.0", () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
 });

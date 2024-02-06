@@ -2,5 +2,12 @@ export interface Task {
   id: string;
   title: string;
   description: string;
-  status: string;
+  status: status;
+}
+
+
+export enum status {
+  toDo = "TODO",
+  inProgress = "INPROGRESS",
+  finished = "FINISHED",
 }

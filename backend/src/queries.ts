@@ -1,5 +1,5 @@
 import { db } from './database';
-
+import { status } from './models/task';
 const tableName = process.env.NODE_ENV === 'test' ? 'testTasks' : 'Tasks';
 
 const createTask = async (
@@ -55,7 +55,7 @@ const deleteTaskById = async (taskId: string) => {
   }
 };
 
-const updateTaskById = async (taskId: string, method: string) => {
+const updateTaskById = async (taskId: string, method: status) => {
   try {
     await db.none(`UPDATE ${tableName} SET status = $1 WHERE id = $2`, [
       method,
