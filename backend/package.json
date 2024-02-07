@@ -7,7 +7,7 @@
     "tsc": "tsc",
     "dev": "ts-node-dev src/index.ts",
     "start": "nodemon build/index.js",
-    "test": "NODE_ENV=test ts-node-dev src/index.ts",
+    "test": "jest",
     "lint": "eslint --ext .js,.ts"
   },
   "author": "Yevhenii Zakharchenko",
