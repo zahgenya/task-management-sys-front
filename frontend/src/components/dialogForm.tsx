@@ -8,8 +8,7 @@ import {
   DialogContentText,
   DialogTitle } from '@mui/material';
 import taskService from '../services/tasks';
-import { TaskFormValues } from '../types';
-import { Task } from '../types';
+import { Task, TaskCreateReq } from '../types';
 
 export default function FormDialog({ setTasks }: { setTasks: React.Dispatch<React.SetStateAction<Task[]>> }) {
   const [open, setOpen] = React.useState(false);
@@ -36,10 +35,9 @@ export default function FormDialog({ setTasks }: { setTasks: React.Dispatch<Reac
           const formJSON = Object.fromEntries((formData as any).entries())
           const title = formJSON.title;
           const description = formJSON.description
-          const taskForm: TaskFormValues = {
+          const taskForm: TaskCreateReq = {
             title: title,
-            description: description,
-            status: "TODO"
+            description: description
           }
           await taskService.createNewTask(taskForm)
           const newTasks = await taskService.getAll();

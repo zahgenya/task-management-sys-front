@@ -1,5 +1,5 @@
 import { Card, CardContent, Grid, Typography, List, ListItem, Box, Button } from '@mui/material';
-import { taskProps } from '../types';
+import { status, taskProps } from '../types';
 import SendIcon from '@mui/icons-material/Send';
 import DeleteIcon from '@mui/icons-material/Delete';
 import taskService from '../services/tasks';
@@ -9,11 +9,11 @@ import { Task } from '../types';
 
 const TaskColumn = ({ tasks, setTasks }: taskProps & { setTasks: React.Dispatch<React.SetStateAction<Task[]>> } ) => {
 
-  const todoTasks = tasks ? tasks.filter(task => task.status === 'TODO') : [];
-  const inProgressTasks = tasks ? tasks.filter(task => task.status === 'INPROGRESS') : [];
-  const finishedTasks = tasks ? tasks.filter(task => task.status === 'FINISHED') : [];
+  const todoTasks = tasks ? tasks.filter(task => task.status === status.toDo) : [];
+  const inProgressTasks = tasks ? tasks.filter(task => task.status === status.inProgress) : [];
+  const finishedTasks = tasks ? tasks.filter(task => task.status === status.finished) : [];
 
-  const handleNextButton = async (taskId: string, method: string) => {
+  const handleNextButton = async (taskId: string, method: status) => {
     try {
       const result = await taskService.updateTask(taskId, method);
       console.log("Update result: ", result)
@@ -71,7 +71,7 @@ const TaskColumn = ({ tasks, setTasks }: taskProps & { setTasks: React.Dispatch<
                         {task.description}
                       </Typography>
                       <Button size='small' variant='outlined' endIcon={<SendIcon />} 
-                      onClick={() => handleNextButton(JSON.stringify(task.id), "INPROGRESS")}>In Progress</Button>
+                      onClick={() => handleNextButton(JSON.stringify(task.id), status.inProgress)}>In Progress</Button>
                     </CardContent>
                   </Card>
                 </ListItem>
@@ -110,7 +110,7 @@ const TaskColumn = ({ tasks, setTasks }: taskProps & { setTasks: React.Dispatch<
                         {task.description}
                       </Typography>
                       <Button size='small' variant='outlined' endIcon={<SendIcon />}
-                       onClick={() => handleNextButton(JSON.stringify(task.id), "FINISHED")}>Finished</Button>
+                       onClick={() => handleNextButton(JSON.stringify(task.id), status.finished)}>Finished</Button>
                     </CardContent>
                   </Card>
                 </ListItem>

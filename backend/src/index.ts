@@ -92,15 +92,15 @@ app.put('/:id/:method', async (req, res, next) => {
     }
 
     switch (method) {
-      case 'toDo':
+      case 'TODO':
         result = await updateTaskById(taskId, status.toDo);
         break;
 
-      case 'inProgress':
+      case 'INPROGRESS':
         result = await updateTaskById(taskId, status.inProgress);
         break;
 
-      case 'finished':
+      case 'FINISHED':
         result = await updateTaskById(taskId, status.finished);
         break;
 

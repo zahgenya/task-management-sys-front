@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Task, TaskFormValues } from '../types';
+import { Task, TaskCreateReq, status } from '../types';
 
 import { apiBaseUrl } from '../constants';
 
@@ -13,7 +13,7 @@ const getAll = async () => {
   }
 }
 
-const updateTask = async (id: string, method: string) => {
+const updateTask = async (id: string, method: status) => {
   try {
     const res = await axios.put(`${apiBaseUrl}/${id}/${method}`)
     return res.data
@@ -23,7 +23,7 @@ const updateTask = async (id: string, method: string) => {
   }
 }
 
-const createNewTask = async (taskObj: TaskFormValues) => {
+const createNewTask = async (taskObj: TaskCreateReq) => {
   try {
     const res = await axios.post(`${apiBaseUrl}`, taskObj)
     return res.data
