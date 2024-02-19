@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import Pino from 'pino-http';
 import favicon from 'express-favicon';
-import { status } from './models/task';
+import { status, TaskReq } from './models/task';
 import {
   createTask,
   getAllTasks,
@@ -34,12 +34,6 @@ app.get('/ping', (_req, res) => {
   console.log('pinged here');
   res.send('pong');
 });
-
-interface TaskReq {
-  title: string;
-  description: string;
-  status: status;
-}
 
 app.post('/', async (req, res, next) => {
   const { title, description } = req.body as TaskReq;

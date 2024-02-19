@@ -8,11 +8,14 @@ const createTask = async (
   status: string
 ) => {
   try {
-    await db.none(
+    const { id } = await db.one(
       `INSERT INTO ${tableName} (title, description, status)
-                   VALUES ($1, $2, $3)`,
+                   VALUES ($1, $2, $3)
+                   RETURNING id`,
       [title, description, status]
     );
+
+    return { id, title, description, status }
   } catch (err) {
     throw err;
   }
