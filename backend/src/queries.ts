@@ -8,10 +8,7 @@ const createTask = async (
   status: string
 ) => {
   try {
-    const { id } = await db.one(
-      `INSERT INTO ${tableName} (title, description, status)
-                   VALUES ($1, $2, $3)
-                   RETURNING id`,
+    const { id } = await db.one(`INSERT INTO ${tableName} (title, description, status) VALUES ($1, $2, $3) RETURNING id`,
       [title, description, status]
     );
 
