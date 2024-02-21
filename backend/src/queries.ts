@@ -50,6 +50,8 @@ const deleteTaskById = async (taskId: string) => {
     if (taskToDelete.rowCount === 0) {
       throw new Error('Task not found');
     }
+
+    return { message: "Succesfully deleted!" }
   } catch (err) {
     throw err;
   }
@@ -66,6 +68,8 @@ const updateTaskById = async (taskId: string, method: status) => {
       `SELECT * FROM ${tableName} WHERE id = $1`,
       taskId
     );
+
+    console.log(updatedTask)
     return updatedTask;
   } catch (err) {
     throw err;
