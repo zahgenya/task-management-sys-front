@@ -3,39 +3,49 @@ import { getAllTasks, getTaskById, createTask, deleteTaskById, updateTaskById } 
 import { db } from './database';
 import { TaskReq, status } from './models/task';
 
-const testAllTask = [{ id: 1 }, { id: 2 }];
-
 jest.mock('./database', () => {
+  const mockDBAny = jest.fn();
+  const mockDBOne = jest.fn();
+  const mockDBNone = jest.fn();
+  const mockDBResult = jest.fn();
   return {
     db: {
-      any: jest.fn(() => testAllTask),
-      one: jest.fn((_sql, taskId) => {
-        return {
-          id: taskId,
-          title: 'Test task',
-          description: 'Test description',
-          status: 'TODO',
-        };
-      }),
-      none: jest.fn(),
-      result: jest.fn(() => testAllTask),
+      any: mockDBAny,
+      one: mockDBOne,
+      none: mockDBNone,
+      result: mockDBResult,
     },
   };
 });
 
 describe('Test getAllTasks', () => {
   it('test query', async () => {
-    const result = await getAllTasks();
+    const expected_value = [
+      { id: 1, title: 'Task 1', description: 'Description 1', status: 'TODO' },
+      { id: 2, title: 'Task 2', description: 'Description 2', status: 'In Progress' },
+    ];
+
+    (db.any as jest.Mock).mockReturnValueOnce(expected_value);
+
+    const tableName = 'testTasks'
+    const result = await getAllTasks()
 
     expect(db.any).toHaveBeenCalled();
-    expect(db.any).toHaveBeenLastCalledWith(`SELECT * FROM testTasks;`);
+    expect(db.any).toHaveBeenLastCalledWith(`SELECT * FROM ${tableName};`);
 
     expect(result).toHaveLength(2);
+    expect(result).toEqual(expected_value);
   });
 });
 
 describe('Test getTaskById', () => {
   it('test query', async () => {
+    const expected_value = [
+      { id: '1', title: 'Task 1', description: 'Description 1', status: 'TODO' }
+    ];
+
+    (db.one as jest.Mock).mockReturnValueOnce(expected_value);
+    
     const taskId = '1';
     const tableName = 'testTasks';
     const result = await getTaskById(taskId);
@@ -46,13 +56,18 @@ describe('Test getTaskById', () => {
       taskId
     );
 
-    expect(result).toHaveProperty('id')
-    expect(result).toBeDefined();
+    expect(result).toEqual(expected_value);
   });
 });
 
 describe('Test creating task', () => {
   it('test query', async () => {
+    const expected_value = [
+      { id: '1', title: 'Task title', description: 'Description 1', status: 'TODO' }
+    ];
+
+    (db.one as jest.Mock).mockReturnValueOnce(expected_value);
+
     const { title, description } = {
       title: 'Test title',
       description: 'Test description',
@@ -67,12 +82,20 @@ describe('Test creating task', () => {
     [title, description, status.toDo]
     );
 
-    expect(result).toBeDefined()
+    expect(result).toEqual({
+      title,
+      description,
+      status: status.toDo,
+    });
   });
 });
 
 describe('Test deleting task', () => {
   it('test query', async () => {
+    const expected_value = [{ message: "Succesfully deleted!" }];
+
+    (db.result as jest.Mock).mockReturnValueOnce(expected_value)
+
     const taskId = "1";
     const tableName = 'testTasks';
 
@@ -87,6 +110,15 @@ describe('Test deleting task', () => {
 
 describe('Test updating task', () => {
   it('test query', async () => {
+    const expected_value = {
+      description: "Test description",
+      id: "1",
+      status: "FINISHED",
+      title: "Test task",
+    };
+
+    (db.one as jest.Mock).mockReturnValueOnce(expected_value)
+
     const taskId = "1";
     const tableName = 'testTasks';
     const method = status.finished;
