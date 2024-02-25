@@ -10,16 +10,51 @@ import { db } from './database';
 import { TaskReq, status } from './models/task';
 
 jest.mock('./database', () => {
-  const mockDBAny = jest.fn();
-  const mockDBOne = jest.fn();
-  const mockDBNone = jest.fn();
-  const mockDBResult = jest.fn();
+  const dbSelectMock = jest.fn((params) => {
+    return params
+
+  });
+
+  const dbDeleteMock = jest.fn((params) => {
+    return params
+
+  });
+
+  const dbUpdateMock = jest.fn((params) => {
+    return params
+
+  });
+
+  const dbInsertMock = jest.fn((params) => {
+    return params
+
+  })
+
+  const dbQueryMock = jest.fn((sql: string, ...params) => {
+    if (sql.trim().startsWith('SELECT')) {
+      return dbSelectMock(params);
+
+    } else if (sql.trim().startsWith('DELETE')) {
+      return dbDeleteMock(params)
+
+    } else if (sql.trim().startsWith('UPDATE')) {
+      return dbUpdateMock(params)
+
+    } else if (sql.trim().startsWith('INSERT')) {
+      return dbInsertMock(params)
+
+    } else {
+      return null
+
+    }
+  });
+
   return {
     db: {
-      any: mockDBAny,
-      one: mockDBOne,
-      none: mockDBNone,
-      result: mockDBResult,
+      one: dbQueryMock,
+      any: dbQueryMock,
+      none: dbQueryMock,
+      result: dbQueryMock,
     },
   };
 });
