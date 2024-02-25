@@ -11,41 +11,32 @@ import { TaskReq, status } from './models/task';
 
 jest.mock('./database', () => {
   const dbSelectMock = jest.fn((params) => {
-    return params
-
+    return params;
   });
 
   const dbDeleteMock = jest.fn((params) => {
-    return params
-
+    return params;
   });
 
   const dbUpdateMock = jest.fn((params) => {
-    return params
-
+    return params;
   });
 
   const dbInsertMock = jest.fn((params) => {
-    return params
-
-  })
+    return params;
+  });
 
   const dbQueryMock = jest.fn((sql: string, ...params) => {
     if (sql.trim().startsWith('SELECT')) {
       return dbSelectMock(params);
-
     } else if (sql.trim().startsWith('DELETE')) {
-      return dbDeleteMock(params)
-
+      return dbDeleteMock(params);
     } else if (sql.trim().startsWith('UPDATE')) {
-      return dbUpdateMock(params)
-
+      return dbUpdateMock(params);
     } else if (sql.trim().startsWith('INSERT')) {
-      return dbInsertMock(params)
-
+      return dbInsertMock(params);
     } else {
-      return null
-
+      return null;
     }
   });
 
@@ -155,6 +146,22 @@ describe('Test creating task', () => {
       status: status.toDo,
     });
   });
+
+  it('test wrong value', async () => {
+    const { title, description } = {
+      title: 1,
+      description: 2,
+    };
+    const errMock = jest
+      .fn<() => Promise<string>>()
+      .mockRejectedValueOnce(new Error('Invalid value'));
+
+    (db.one as jest.Mock) = errMock;
+
+    await expect(
+      createTask(title as any, description as any, status.toDo)
+    ).rejects.toThrowError('Invalid value');
+  });
 });
 
 describe('Test deleting task', () => {
@@ -175,6 +182,16 @@ describe('Test deleting task', () => {
     );
 
     expect(result).toEqual({ message: 'Succesfully deleted!' });
+  });
+
+  it('test invalid id', async () => {
+    const errMock = jest
+      .fn<() => Promise<string>>()
+      .mockRejectedValueOnce(new Error('Task does not exist'));
+
+    (db.result as jest.Mock) = errMock;
+
+    await expect(deleteTaskById('99')).rejects.toThrowError('Task does not exist');
   });
 });
 
