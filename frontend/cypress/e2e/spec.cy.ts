@@ -1,4 +1,4 @@
-describe('template spec', () => {
+describe('test for dialog form', () => {
   it('Creating new task', () => {
     cy.visit('http://localhost:5173/')
     cy.contains('Create New Task').click()
@@ -8,7 +8,11 @@ describe('template spec', () => {
     cy.contains('Task 1')
   })
 
-  // it('TEST', () => {
-  //   cy.visit('http://localhost:3000/tasks')
-  // })
+  it('test for buttons', () => {
+    cy.visit('http://localhost:5173/')
+    cy.get('#inProgressButton').click()
+    cy.get('#finishedButton').click()
+    cy.get('#deleteButton').click()
+    cy.contains('Task 1').should('not.exist')
+  })
 })
