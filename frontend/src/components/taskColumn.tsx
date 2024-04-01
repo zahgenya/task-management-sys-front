@@ -90,7 +90,7 @@ const TaskColumn = ({
                         <Button
                           size="small"
                           variant="outlined"
-                          id="inProgressButton"
+                          data-testid="inProgressButton"
                           name="inProgressButton"
                           endIcon={<SendIcon />}
                           onClick={() =>
@@ -142,7 +142,7 @@ const TaskColumn = ({
                         <Button
                           size="small"
                           variant="outlined"
-                          id="finishedButton"
+                          data-testid="finishedButton"
                           name="finishedButton"
                           endIcon={<SendIcon />}
                           onClick={() =>
@@ -188,7 +188,7 @@ const TaskColumn = ({
                         <Button
                           size="small"
                           variant="outlined"
-                          id="deleteButton"
+                          data-testid="deleteButton"
                           name="deleteButton"
                           endIcon={<DeleteIcon />}
                           onClick={() =>
