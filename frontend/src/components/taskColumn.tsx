@@ -18,7 +18,7 @@ import { Task } from "../types";
 
 const TaskColumn = ({
   tasks,
-  setTasks,
+  setTasks
 }: taskProps & { setTasks: React.Dispatch<React.SetStateAction<Task[]>> }) => {
   const todoTasks = tasks
     ? tasks.filter((task) => task.status === status.toDo)
@@ -110,10 +110,7 @@ const TaskColumn = ({
             )}
           </CardContent>
           <Box display="flex" justifyContent="flex-end" p={2}>
-            {/* <IconButton aria-label='add' title='Add task'>
-                <AddTaskIcon />
-          </IconButton> */}
-            <FormDialog setTasks={setTasks} />
+           <FormDialog setTasks={setTasks} />
           </Box>
         </Card>
       </Grid>
